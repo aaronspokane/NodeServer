@@ -3,6 +3,7 @@ const format = require("xml-formatter");
 const fileUtility = require("./fileUtility.js");
 
 const createFiles = (req) => {
+  
   // Folders
   const containerFolder = req.body.modulePath + "/" + req.body.moduleName;
   const docFolder = containerFolder + "/Doc";
@@ -18,6 +19,9 @@ const createFiles = (req) => {
   const releaseNotesContent = fileUtility.releaseNoteContent(req);
   const settingsContent = fileUtility.settingXmlContent(req);
   const doBuildCopyContent = fileUtility.buildCopyContent(req);
+  const gvMaxLength =  Math.max(...req.body.globalVariables.map(x => x.Name.length));  
+  const svMaxLength =  Math.max(...req.body.serviceVariables.map(x => x.Name.length)); 
+  const moduleCopyContent = fileUtility.moduleContent(req, gvMaxLength, svMaxLength);
 
   const folders = {
     containerFolder: containerFolder,
@@ -28,9 +32,9 @@ const createFiles = (req) => {
 
   const files = {    
     doc: {
-      name: `Module_${req.body.moduleName}.txt`,
+      name: `${docFile}.txt`,
       path: docFolder,
-      content: "",
+      content: moduleCopyContent,
     },
     releaseNote: {
       name: `ReleaseNotes_${req.body.moduleName}.txt`,
@@ -46,7 +50,7 @@ const createFiles = (req) => {
       name: `DoBuildCopy.bat`,
       path: containerFolder,
       content: doBuildCopyContent,
-    },
+    },    
   };
 
   // Create folders

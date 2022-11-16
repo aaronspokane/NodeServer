@@ -52,9 +52,38 @@ const buildCopyContent = (req) => {
     return returnContent;
 }
 
+const moduleContent = (req, gvMaxLength, svMaxLength) => {
+    let returnContent = `-- ${req.body.moduleName} Config --\r\n\n`;
+    returnContent     += `-- MAXQueueDesigner Settings Tab (shared settings - may already be configured):\r\n\n`;
+    returnContent     += `Global Variables\r\n`;   
+    returnContent     += `Name`+ ' '.repeat((gvMaxLength - 4) + 3) + `Value\r\n`;  
+    for(const item of req.body.globalVariables)
+    {
+        const length = item.Name.length;
+        returnContent     += `${item.Name}` + ' '.repeat((gvMaxLength - length) + 3) + `${item.Value}\r\n`;
+    }
+
+    returnContent     += `\r\nService Variables\r\n`; 
+    returnContent     += `Name`+ ' '.repeat((svMaxLength - 4) + 3) + `Value\r\n`; 
+    for(const item of req.body.serviceVariables)
+    {
+        const length = item.Name.length;
+        returnContent     += `${item.Name}` + ' '.repeat((svMaxLength - length) + 3) + `${item.Value}\r\n`;
+    }
+
+    returnContent     += `\r\n**********************************************\r\n\n`; 
+    returnContent     += `-- MAXQueueDesigner Data Event Definitions Tab:\r\n`; 
+    returnContent     += `-- Enable All Below\r\n`; 
+    returnContent     += ' '.repeat(3) + `[None]\r\n`; 
+    returnContent     += `\r\n**********************************************\r\n\n`; 
+    
+    return returnContent;
+}
+
 
 module.exports = {
     releaseNoteContent,   
     settingXmlContent,
     buildCopyContent,
+    moduleContent,
 }
