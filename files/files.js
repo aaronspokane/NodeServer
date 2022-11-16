@@ -1,5 +1,6 @@
-var fs = require("fs");
-var format = require("xml-formatter");
+const fs = require("fs");
+const format = require("xml-formatter");
+const fileUtility = require("./fileUtility.js");
 
 const createFiles = (req) => {
   // Folders
@@ -11,7 +12,12 @@ const createFiles = (req) => {
   // Files
   const docFile = `Module_${req.body.moduleName}`;
   const pkgXml = req.body.packageConfigFilePath;
-  const pkgConfigName = req.body.packageConfigName;
+  const pkgConfigName = req.body.packageConfigName;  
+
+  // Content
+  const releaseNotesContent = fileUtility.releaseNoteContent(req);
+  const settingsContent = fileUtility.settingXmlContent(req);
+  const doBuildCopyContent = fileUtility.buildCopyContent(req);
 
   const folders = {
     containerFolder: containerFolder,
@@ -20,7 +26,7 @@ const createFiles = (req) => {
     packages: packageFolder,
   };
 
-  const files = {
+  const files = {    
     doc: {
       name: `Module_${req.body.moduleName}.txt`,
       path: docFolder,
@@ -29,7 +35,17 @@ const createFiles = (req) => {
     releaseNote: {
       name: `ReleaseNotes_${req.body.moduleName}.txt`,
       path: containerFolder,
-      content: "",
+      content: releaseNotesContent,
+    },
+    setting: {
+      name: `settings.xml`,
+      path: containerFolder,
+      content: settingsContent,
+    },
+    doBuildCopy: {
+      name: `DoBuildCopy.bat`,
+      path: containerFolder,
+      content: doBuildCopyContent,
     },
   };
 
