@@ -43,6 +43,10 @@ const buildCopyContent = (req) => {
         if(value !== "")
             returnContent     += `copy ..\\Assembly\\bin\\Release\\${value} %ModuleFldr%\\%Module%\\Server\r\n`;
     }
+    for(const [,value] of Object.entries(req.body.extendedFacades)) {
+        if(value !== "")
+            returnContent     += `copy ..\\ExtendedFacades\\bin\\Release\\${value} %ModuleFldr%\\%Module%\\Server\r\n`;
+    }
     returnContent     += `copy .\\ReleaseNotes_*.txt %ModuleFldr%\\%Module%\\Server\\ReleaseNotes\r\n`;
     returnContent     += `copy %Output%\\%Project%\\Interfaces\\Work\\%SetupFullName%.txt+ReleaseNotes_*.txt %Output%\\%Project%\\Interfaces\\Work\\%SetupFullName%.txt /B\r\n`;
     return returnContent;
