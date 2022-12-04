@@ -1,1 +1,1 @@
-npm install -g nodemon && npm start
+npm start
