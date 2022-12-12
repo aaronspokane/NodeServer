@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var filesRouter = require('./routes/createFiles');
+var githubsRouter = require('./routes/githubCommits');
 const cors = require('cors');
 
 var app = express();
@@ -23,6 +24,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({origin: '*'}));
 app.use('/', indexRouter);
 app.use('/createFiles', filesRouter);
+app.use('/githubCommits', githubsRouter);
+
+app.listen(3000, ()=>{
+  console.log('Server is up and running...')
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
